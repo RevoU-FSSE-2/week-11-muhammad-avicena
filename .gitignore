@@ -1,0 +1,3 @@
+WebClient.Inventory/node_modules/
+WebServer.Inventory.app/node_modules/
+WebServer.Inventory.app/.env
