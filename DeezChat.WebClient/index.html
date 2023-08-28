@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory-Tracker App</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" href="./img/images.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      tailwind.config = {
+        content: ["./src/**/*.{html,js}"],
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                200: "#bfdbfe",
+                300: "#93c5fd",
+                400: "#60a5fa",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                800: "#1e40af",
+                900: "#1e3a8a",
+                950: "#172554",
+              },
+            },
+          },
+          fontFamily: {
+            monospace: ["monospace", "monospace"],
+          },
+        },
+        plugins: [],
+      };
+    </script>
+  </head>
+
+  <body>
+    <section class="bg-gray-50 dark:bg-gray-900">
+      <div
+        class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+      >
+        <a
+          href="#"
+          class="flex items-center mb-6 text-2xl font-semibold text-gray-900 underline decoration-indigo-500 dark:text-white"
+        >
+          Inventory-Tracker App
+        </a>
+        <div
+          class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+        >
+          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1
+              class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
+            >
+              Sign in to your account
+            </h1>
+            <form class="space-y-4 md:space-y-6">
+              <div>
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="example@email.com"
+                  required=""
+                />
+              </div>
+              <div>
+                <label
+                  for="password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required=""
+                />
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input
+                      id="remember"
+                      aria-describedby="remember"
+                      type="checkbox"
+                      class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="remember"
+                      class="text-gray-500 dark:text-gray-300"
+                      >Remember me</label
+                    >
+                  </div>
+                </div>
+                <a
+                  href="#"
+                  class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >Forgot password?</a
+                >
+              </div>
+              <button
+                id="signInButton"
+                type="submit"
+                class="w-full bg-black text-white hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              >
+                Sign in
+              </button>
+              <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                Don’t have an account yet?
+                <a
+                  href="#"
+                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >Sign up</a
+                >
+              </p>
+              <a
+                class="flex justify-center text-gray-500 text-sm underline decoration-sky-600"
+                >© 2023 Muhammad Avicena. All rights reserved</a
+              >
+            </form>
+            <script>
+              $("#signInButton").on("click", function (e) {
+                e.preventDefault();
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                const loginData = {
+                  email: email,
+                  password: password,
+                };
+                fetch("https://financial-api.avicena.dev/api/auth/login", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(loginData),
+                })
+                  .then((response) => {
+                    const statusCode = response.status;
+                    console.log(response);
+                    if (statusCode == 200) {
+                      Swal.fire({
+                        title: "Authorized",
+                        text: "You have successfully logged in. You will be redirected to dashboard within 3 seconds.",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                      });
+                      return response.json();
+                    } else if (statusCode == 401) {
+                      Swal.fire({
+                        title: "Unauthorized",
+                        text: "Incorrect email or password. Please try again.",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                      });
+                    }
+                  })
+                  .then((data) => {
+                    console.log(data);
+                    if (data != null || undefined) {
+                      localStorage.setItem(
+                        "userData",
+                        JSON.stringify(data.user)
+                      );
+                      setTimeout(function () {
+                        window.location.href = "dashboard.html";
+                      }, 3000);
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error.message);
+                    Swal.fire({
+                      title: "Internal Server Error",
+                      text: `${error.message}. Please contact the admin.`,
+                      icon: "error",
+                      confirmButtonText: "OK",
+                    });
+                  });
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      var exports = "";
+    </script>
+    <script type="module" src="dist/index.js"></script>
+  </body>
+</html>
