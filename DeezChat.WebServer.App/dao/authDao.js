@@ -28,12 +28,12 @@ class AuthDao {
       gender,
       createdDate,
     };
-    
+
     const isUserTaken = await this.db.collection("users").findOne({ username });
     if (isUserTaken) {
       throw new StandardError({
         success: false,
-        message: "User already taken",
+        message: "Username is not available. Please try another",
         status: 400,
       });
     }

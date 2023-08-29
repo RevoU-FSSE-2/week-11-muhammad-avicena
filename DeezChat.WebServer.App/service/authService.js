@@ -8,7 +8,7 @@ class AuthService {
     this.authDao = authDao;
   }
 
-  async loginUser(username, password) {
+  async loginUser({ username, password }) {
     const user = await this.authDao.loginUser({ username, password });
     if (!user) {
       throw new StandardError({
@@ -35,11 +35,19 @@ class AuthService {
     }
   }
 
-  async registerUser(username, password, role) {
+  async registerUser({ username, password, email, gender }) {
     if (username.trim() === "") {
       throw new StandardError({
         success: false,
-        message: "Failed to register. Username cannot be blank",
+        message: "Username cannot be blank. Please try again.",
+        status: 400,
+      });
+    }
+
+    if (username && password && email && gender) {
+      throw new StandardError({
+        success: false,
+        message: "Invalid input data. Please try again.",
         status: 400,
       });
     }
@@ -49,7 +57,8 @@ class AuthService {
       const user = await this.authDao.registerUser({
         username,
         password: hashedPassword,
-        role,
+        email,
+        gender,
       });
       return { success: true, message: user.insertedId };
     } else {

@@ -7,7 +7,7 @@ async function loginUser(req, res, next) {
   try {
     const authDao = new AuthDao(db);
     const authService = new AuthService(authDao);
-    const result = await authService.loginUser(username, password);
+    const result = await authService.loginUser({ username, password });
 
     if (result.success) {
       return res.status(200).json({
@@ -24,29 +24,26 @@ async function loginUser(req, res, next) {
 }
 
 async function registerUser(req, res, next) {
-  const { username, password, role } = req.body;
+  const { username, password, gender, email } = req.body;
   const { db } = req;
   try {
-    if (username && password && role) {
-      const userDao = new AuthDao(db);
-      const userService = new AuthService(userDao);
-      const result = await userService.registerUser(username, password, role);
+    const userDao = new AuthDao(db);
+    const userService = new AuthService(userDao);
+    const result = await userService.registerUser({
+      username,
+      password,
+      email,
+      gender,
+    });
 
-      if (result.success) {
-        return res.status(200).json({
-          success: true,
-          message: "Successfully created a user",
-          data: { _id: result.message },
-        });
-      } else {
-        return res
-          .status(400)
-          .json({ success: false, message: result.message });
-      }
+    if (result.success) {
+      return res.status(200).json({
+        success: true,
+        message: "Successfully created a user",
+        data: { _id: result.message },
+      });
     } else {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid input data" });
+      return res.status(400).json({ success: false, message: result.message });
     }
   } catch (error) {
     next(error);
