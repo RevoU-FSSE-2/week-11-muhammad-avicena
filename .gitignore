@@ -1,3 +1,2 @@
-DeezChat.Webclient/node_modules/
-DeezChat.WebServer.App/node_modules/
-DeezChat.WebServer.App/.env
+node_modules
+.env
