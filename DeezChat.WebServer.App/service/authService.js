@@ -9,64 +9,85 @@ class AuthService {
   }
 
   async loginUser({ username, password }) {
-    const user = await this.authDao.loginUser({ username, password });
-    if (!user) {
-      throw new StandardError({
-        success: false,
-        message: "Incorrect username or password. Please try again.",
-        status: 401,
-      });
-    }
+    try {
+      const user = await this.authDao.loginUser({ username, password });
+      if (!user) {
+        throw new StandardError({
+          success: false,
+          message: "Incorrect username or password. Please try again.",
+          status: 401,
+        });
+      }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compare(password, user.password);
 
-    if (passwordMatch) {
-      const token = jwt.sign(
-        { username: user.username, id: user._id, role: user.role },
-        JWT_SIGN
-      );
-      return { success: true, message: token };
-    } else {
+      if (passwordMatch) {
+        const token = jwt.sign(
+          { username: user.username, id: user._id, role: user.role },
+          JWT_SIGN
+        );
+        return { success: true, message: token };
+      } else {
+        throw new StandardError({
+          success: false,
+          message: "Incorrect username or password. Please try again.",
+          status: 401,
+        });
+      }
+    } catch (error) {
       throw new StandardError({
-        success: false,
-        message: "Incorrect username or password. Please try again.",
-        status: 401,
+        message: error.message,
+        status: 500,
       });
     }
   }
 
-  async registerUser({ username, password, email, gender }) {
-    if (username.trim() === "") {
-      throw new StandardError({
-        success: false,
-        message: "Username cannot be blank. Please try again.",
-        status: 400,
-      });
-    }
+  async registerUser({ username, password, gender }) {
+    try {
+      if (!username || !password || !gender) {
+        throw new StandardError({
+          success: false,
+          message: "Invalid input data. Please try again.",
+          status: 400,
+        });
+      }
 
-    if (username && password && email && gender) {
-      throw new StandardError({
-        success: false,
-        message: "Invalid input data. Please try again.",
-        status: 400,
-      });
-    }
+      const allowedGender = ["male", "female"];
+      if (!allowedGender.includes(gender)) {
+        throw new StandardError({
+          status: 400,
+          message: "Failed to register. Only male and female are allowed",
+        });
+      }
 
-    if (password.length >= 8 && /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password)) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await this.authDao.registerUser({
-        username,
-        password: hashedPassword,
-        email,
-        gender,
-      });
-      return { success: true, message: user.insertedId };
-    } else {
+      if (username.trim() === "") {
+        throw new StandardError({
+          success: false,
+          message: "Username cannot be blank. Please try again.",
+          status: 400,
+        });
+      }
+
+      if (password.length >= 8 && /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password)) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await this.authDao.registerUser({
+          username,
+          password: hashedPassword,
+          gender,
+        });
+        return { success: true, message: user.insertedId };
+      } else {
+        throw new StandardError({
+          success: false,
+          message:
+            "Password should be at least 8 characters and contain alphanumeric characters",
+          status: 400,
+        });
+      }
+    } catch (error) {
       throw new StandardError({
-        success: false,
-        message:
-          "Password should be at least 8 characters and contain alphanumeric characters",
-        status: 400,
+        message: error.message,
+        status: 500,
       });
     }
   }

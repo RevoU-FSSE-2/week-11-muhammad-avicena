@@ -24,15 +24,14 @@ async function loginUser(req, res, next) {
 }
 
 async function registerUser(req, res, next) {
-  const { username, password, gender, email } = req.body;
+  const { username, password, gender } = req.body;
   const { db } = req;
   try {
-    const userDao = new AuthDao(db);
-    const userService = new AuthService(userDao);
-    const result = await userService.registerUser({
+    const authDao = new AuthDao(db);
+    const authService = new AuthService(authDao);
+    const result = await authService.registerUser({
       username,
       password,
-      email,
       gender,
     });
 
