@@ -7,15 +7,11 @@ class AuthDao {
   }
 
   async loginUser({ username }) {
-    try {
-      const user = await this.db.collection("users").findOne({ username });
-      return user;
-    } catch (error) {
-      throw error;
-    }
+    const user = await this.db.collection("users").findOne({ username });
+    return user;
   }
 
-  async registerUser({ username, password, email, gender }) {
+  async registerUser({ username, password, gender }) {
     const newDate = new Date();
     const createdDate = format(newDate, "yyyy-MM-dd");
     const role = "member";
@@ -24,7 +20,6 @@ class AuthDao {
       username,
       password,
       role,
-      email,
       gender,
       createdDate,
     };
