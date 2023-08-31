@@ -77,6 +77,28 @@ class UserDao {
       .toArray();
     return user;
   }
+
+  async deleteRoom({ id }) {
+    try {
+      const objectId = new ObjectId(id);
+      const getRoom = await this.db
+        .collection("rooms")
+        .findOne({ _id: objectId });
+
+      if (!getRoom) {
+        throw new Error("Room not found");
+      }
+
+      const rooms = await this.db
+        .collection("rooms")
+        .findOneAndUpdate({ _id: objectId }, { $set: { isDeleted: true } });
+        
+      return rooms;
+    } catch (error) {
+      console.log(error.message);
+      throw error;
+    }
+  }
 }
 
 module.exports = UserDao;

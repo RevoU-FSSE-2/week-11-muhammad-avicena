@@ -87,6 +87,20 @@ class RoomService {
       throw new StandardError({ status: error.status, message: error.message });
     }
   }
+
+  async deleteRoom({ id }) {
+    try {
+      const roomData = await this.roomDao.deleteRoom({ id });
+      
+      if (!roomData) {
+        throw new StandardError({ status: 400, message: "Room not found" });
+      }
+      return { success: true, message: roomData };
+    } catch (error) {
+      console.log(error);
+      throw new StandardError({ status: error.status, message: error.message });
+    }
+  }
 }
 
 module.exports = RoomService;

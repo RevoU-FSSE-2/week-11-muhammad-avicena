@@ -83,9 +83,31 @@ async function getUserJoinbyRoomName(req, res, next) {
   }
 }
 
+async function deleteRoom(req, res, next) {
+  const { id } = req.params;
+  const { db } = req
+  try {
+    const roomDao = new RoomDao(db);
+    const roomService = new RoomService(roomDao);
+    const result = await roomService.deleteRoom({ id });
+    if (result.success) {
+      return res.status(200).json({
+        success: true,
+        message: "Successfully deleted a room",
+        data: result.message,
+      });
+    } else {
+      res.status(400).json({ success: false, message: result.message });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createRoom,
   userJoin,
   getUserJoinById,
-  getUserJoinbyRoomName
+  getUserJoinbyRoomName,
+  deleteRoom
 };
