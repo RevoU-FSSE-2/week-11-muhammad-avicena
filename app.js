@@ -15,17 +15,32 @@ const {
   getRoomUsers,
 } = require("./utils/user");
 const formatMessage = require("./utils/message");
-require("dotenv").config();
-
+const swaggerUi = require("swagger-ui-express");
+const yaml = require("yaml");
+const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+require("dotenv").config();
 
+// WebClient from Public
 app.use(express.static(path.join(__dirname, "public")));
 
-const botName = "DeezChat Bot";
+// Middleware
+app.use(logger("dev"));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(databaseMiddleware);
 
+// APi Documentation
+const openApiPath = "api-docs.yaml";
+const readApiFile = fs.readFileSync(openApiPath, "utf8");
+const swaggerDocs = yaml.parse(readApiFile);
+
+// Socket connection
 io.on("connection", (socket) => {
+  const botName = "DeezChat Bot";
+
   console.log("Connected to socket");
   socket.on("joinRoom", ({ username, roomName }) => {
     const user = userJoin(socket.id, username, roomName);
@@ -78,10 +93,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-app.use(logger("dev"));
-app.use(cors());
-app.use(bodyParser.json());
-app.use(databaseMiddleware);
 
 // Import router
 const indexRouter = require("./routes/indexRoutes");
@@ -89,10 +100,9 @@ const authRouter = require("./routes/authRoutes");
 const userRouter = require("./routes/userRoutes");
 const roomRouter = require("./routes/roomRoutes");
 
-// Middleware
-
 // Use router
 app.use("/", indexRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/rooms", roomRouter);
