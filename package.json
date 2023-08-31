@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "test": "npx jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "Avicena",
@@ -20,9 +21,12 @@
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^6.0.0",
     "morgan": "^1.10.0",
-    "socket.io": "^4.4.1"
+    "socket.io": "^4.4.1",
+    "swagger-ui-express": "^5.0.0",
+    "yaml": "^2.3.2"
   },
   "devDependencies": {
+    "jest": "^29.6.4",
     "nodemon": "^3.0.1"
   }
 }
