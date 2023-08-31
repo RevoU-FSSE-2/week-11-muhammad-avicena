@@ -13,6 +13,12 @@ class UserDao {
       .toArray();
   }
 
+  async getUserById({ id }) {
+    const objectId = new ObjectId(id);
+    const user = await this.db.collection("users").findOne({ _id: objectId });
+    return user;
+  }
+
   async updateUserRole({ id, role }) {
     const objectId = new ObjectId(id);
     const user = await this.db

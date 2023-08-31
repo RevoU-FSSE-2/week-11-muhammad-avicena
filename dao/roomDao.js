@@ -1,6 +1,6 @@
 const StandardError = require("../utils/constant/standardError");
 const { format } = require("date-fns");
-
+const { ObjectId } = require("mongodb");
 class UserDao {
   constructor(db) {
     this.db = db;
@@ -37,19 +37,45 @@ class UserDao {
     return room;
   }
 
-  async getUserJoin({ username, roomName }) {
-    const user = await this.db
-      .collection("users")
-      .findOne({ username }, { isDeleted: { $exists: false } });
-    if (!user) {
-      throw new StandardError({ status: 404, message: "User not found" });
+  async userJoin({ username, roomName }) {
+    // const user = await this.db
+    //   .collection("users")
+    //   .findOne({ username }, { isDeleted: { $exists: false } });
+
+    const getRoom = await this.db
+      .collection("rooms")
+      .findOne({ roomName }, { isDeleted: { $exists: false } });
+
+    if (!getRoom) {
+      throw new StandardError({
+        status: 400,
+        message: `${roomName} room doesn't exist. Please try another.`,
+      });
     }
+
     const userData = {
-      user,
+      username,
       roomName,
     };
 
-    return userData;
+    const room = await this.db.collection("participants").insertOne(userData);
+    return room;
+  }
+
+  async getUserJoinById({ id }) {
+    const objectId = new ObjectId(id);
+    const user = await this.db
+      .collection("participants")
+      .findOne({ _id: objectId });
+    return user;
+  }
+
+  async getUserJoinbyRoomName({ roomName }) {
+    const user = await this.db
+      .collection("participants")
+      .find({ roomName })
+      .toArray();
+    return user;
   }
 }
 
