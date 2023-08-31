@@ -8,6 +8,13 @@ const socketio = require("socket.io");
 const databaseMiddleware = require("./middleware/databaseMiddleware");
 const errorHandlerMiddleware = require("./middleware/errorHandlerMiddleware");
 const connectMongoDb = require("./db/db");
+const {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+} = require("./utils/user");
+const formatMessage = require("./utils/message");
 require("dotenv").config();
 
 const app = express();
@@ -16,59 +23,61 @@ const io = socketio(server);
 
 app.use(express.static(path.join(__dirname, "public")));
 
-io.on("connection", (socket) => {
-  // console.log(io.of("/").adapter);
-  console.log("user connected");
-  socket.on("joinRoom", ({ username, room }) => {
-    const user = userJoin(socket.id, username, room);
+const botName = "DeezChat Bot";
 
-    socket.join(user.room);
-  });
+io.on("connection", (socket) => {
+  console.log("Connected to socket");
+  socket.on("joinRoom", ({ username, roomName }) => {
+    const user = userJoin(socket.id, username, roomName);
+
+    socket.join(user.roomName);
 
     // Welcome current user
-  socket.emit("message", { content: "Connected to WebSocket" });
+    socket.emit(
+      "message",
+      formatMessage(botName, "Welcome to Deez-Chat App, Let's talk !")
+    );
 
-  //   // Broadcast when a user connects
+    // Broadcast when a user connects
     socket.broadcast
-      .to(user.room)
+      .to(user.roomName)
       .emit(
-        "message",
+        "welcomeMessage",
         formatMessage(botName, `${user.username} has joined the chat`)
       );
 
-  //   // Send users and room info
-  //   io.to(user.room).emit("roomUsers", {
-  //     room: user.room,
-  //     users: getRoomUsers(user.room),
-  //   });
-  // });
+    // Send users and room info
+    io.to(user.roomName).emit("roomUsers", {
+      roomName: user.roomName,
+      users: getRoomUsers(user.roomName),
+    });
+  });
 
-  // // Listen for chatMessage
-  // socket.on("chatMessage", (msg) => {
-  //   const user = getCurrentUser(socket.id);
+  // Listen for chatMessage
+  socket.on("chatMessage", (msg) => {
+    const user = getCurrentUser(socket.id);
 
-  //   io.to(user.room).emit("message", formatMessage(user.username, msg));
-  // });
+    io.to(user.roomName).emit("message", formatMessage(user.username, msg));
+  });
 
-  // // Runs when client disconnects
-  // socket.on("disconnect", () => {
-  //   const user = userLeave(socket.id);
+  // Runs when client disconnects
+  socket.on("disconnect", () => {
+    const user = userLeave(socket.id);
 
-  //   if (user) {
-  //     io.to(user.room).emit(
-  //       "message",
-  //       formatMessage(botName, `${user.username} has left the chat`)
-  //     );
+    if (user) {
+      io.to(user.roomName).emit(
+        "welcomeMessage",
+        formatMessage(botName, `${user.username} has left the chat`)
+      );
 
-  //     // Send users and room info
-  //     io.to(user.room).emit("roomUsers", {
-  //       room: user.room,
-  //       users: getRoomUsers(user.room),
-  //     });
-  //   }
-  // });
+      // Send users and room info
+      io.to(user.roomName).emit("roomUsers", {
+        roomName: user.roomName,
+        users: getRoomUsers(user.roomName),
+      });
+    }
+  });
 });
-
 app.use(logger("dev"));
 app.use(cors());
 app.use(bodyParser.json());
