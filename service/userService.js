@@ -13,7 +13,21 @@ class UserService {
       }
       return { success: true, message: user };
     } catch (error) {
-      throw new StandardError({ status: 500, message: error.message });
+      console.log(error);
+      throw new StandardError({ status: error.status, message: error.message });
+    }
+  }
+
+  async getUserById({ id }) {
+    try {
+      const user = await this.userDao.getUserById({ id });
+      if (!user) {
+        throw new StandardError({ status: 404, message: "User not found" });
+      }
+      return { success: true, message: user };
+    } catch (error) {
+      console.log(error);
+      throw new StandardError({ status: error.status, message: error.message });
     }
   }
 
@@ -32,7 +46,8 @@ class UserService {
       });
       return { success: true, message: transferData };
     } catch (error) {
-      throw new StandardError({ status: 500, message: error.message });
+      console.log(error);
+      throw new StandardError({ status: error.status, message: error.message });
     }
   }
 }
