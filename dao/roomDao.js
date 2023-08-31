@@ -37,6 +37,14 @@ class UserDao {
     return room;
   }
 
+  async findAllListRoom() {
+    const room = await this.db
+      .collection("rooms")
+      .find({ isDeleted: { $exists: false } })
+      .toArray();
+    return room;
+  }
+
   async userJoin({ username, roomName }) {
     // const user = await this.db
     //   .collection("users")
@@ -62,14 +70,6 @@ class UserDao {
     return room;
   }
 
-  async getUserJoinById({ id }) {
-    const objectId = new ObjectId(id);
-    const user = await this.db
-      .collection("participants")
-      .findOne({ _id: objectId });
-    return user;
-  }
-
   async getUserJoinbyRoomName({ roomName }) {
     const user = await this.db
       .collection("participants")
@@ -92,7 +92,7 @@ class UserDao {
       const rooms = await this.db
         .collection("rooms")
         .findOneAndUpdate({ _id: objectId }, { $set: { isDeleted: true } });
-        
+
       return rooms;
     } catch (error) {
       console.log(error.message);

@@ -41,27 +41,6 @@ async function userJoin(req, res, next) {
   }
 }
 
-async function getUserJoinById(req, res, next) {
-  const { id } = req.params;
-  const { db } = req;
-  try {
-    const roomDao = new RoomDao(db);
-    const roomService = new RoomService(roomDao);
-    const result = await roomService.getUserJoinById({ id });
-    if (result.success) {
-      return res.status(200).json({
-        success: true,
-        message: "User Join found",
-        data: result.message,
-      });
-    } else {
-      res.status(400).json({ success: false, message: result.message });
-    }
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function getUserJoinbyRoomName(req, res, next) {
   const { roomName } = req.query;
   const { db } = req;
@@ -104,10 +83,30 @@ async function deleteRoom(req, res, next) {
   }
 }
 
+async function getAllListRooms(req, res, next) {
+  const { db } = req;
+  try {
+    const roomDao = new RoomDao(db);
+    const roomService = new RoomService(roomDao);
+    const result = await roomService.getAllListRoom();
+    if (result.success) {
+      return res.status(200).json({
+        success: true,
+        message: "List of all rooms",
+        data: result.message,
+      });
+    } else {
+      res.status(400).json({ success: false, message: result.message });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createRoom,
   userJoin,
-  getUserJoinById,
   getUserJoinbyRoomName,
+  getAllListRooms,
   deleteRoom
 };
