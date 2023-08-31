@@ -13,7 +13,7 @@ async function loginUser(req, res, next) {
       return res.status(200).json({
         success: true,
         message: "Successfully logged in",
-        data: { token: result.message },
+        data: result.message,
       });
     } else {
       res.status(400).json({ success: false, message: result.message });
