@@ -45,7 +45,7 @@ You will need a github account to clone this repository, make sure you're connec
 
 - npm install
 
-# Set up the .env file, follow the template from `.env.example`. 
+# Set up the .env file, follow the template from `.env.example`.
 
   # PORT
   PORT=5001
@@ -68,20 +68,20 @@ You will need a github account to clone this repository, make sure you're connec
 
 **Endpoint :** [https://deezchat.avicena.dev](https://deezchat.avicena.dev)
 
-| Name                          | HTTP Method | Endpoint                                                                                                   | Requirements                                              |
-| ----------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| **Login User**                | `POST`      | [/api/v1/auth/login](https://deezchat.avicena.dev/api-docs)                                                | Request Body: `username: string, password: string`        |
-| **Register User**             | `POST`      | [/api/v1/auth/register](https://deezchat.avicena.dev/api-docs)                                             | Request Body: `username: string, password: string`        |
-| **List All User**             | `GET`       | [/api/v1/users](https://deezchat.avicena.dev/api-docs)                                                     |
-| **List User by ID**           | `GET`       | [/api/v1/users/:id](https://deezchat.avicena.dev/api-docs)                                                 | Request Params: `id: number`                              |
-| **Update User role**          | `PATCH`     | [/api/v1/users/role/:id](https://deezchat.avicena.dev/api-docs)                                            | Request Params: `id: number` Request Body: `role: string` |
-| **List All Rooms**            | `GET`       | [/api/v1/rooms](https://deezchat.avicena.dev/api-docs)                                                     |                                                           |
-| **Create a room**             | `POST`      | [/api/v1/rooms](https://deezchat.avicena.dev/api-docs)                                                     | Request Body: `roomName: string, username: string`        |
-| **Delete Room by ID**         | `DELETE`    | [/api/v1/rooms/:id](https://deezchat.avicena.dev/api-docs)                                                 | Request Params: `id: number`                              |
-| **User Join**                 | `POST`      | [/api/v1/participants](https://deezchat.avicena.dev/api-docs)                                              | Request Body: `roomName: string, username: string`        |
-| **Get User Join**             | `GET`       | [/api/v1/participants?roomName={roomName}&username={username}](httpshttps://deezchat.avicena.dev/api-docs) | Request Query: `roomName: string, username: string`       |
-| **Get User Join by RoomName** | `GET`       | [/api/v1/participants/list?roomName={roomName}](httpshttps://deezchat.avicena.dev/api-docs)                | Request Query: `roomName: string`                         |
-| **User Leave**                | `DELETE`    | [/api/v1/participants](https://deezchat.avicena.dev/api-docs)                                              | Request Body: `username: string`                          |
+| Name                          | HTTP Method | Endpoint                                                                                              | Requirements                                              |
+| ----------------------------- | ----------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Login User**                | `POST`      | [/api/v1/auth/login](https://deezchat.avicena.dev/api-docs)                                           | Request Body: `username: string, password: string`        |
+| **Register User**             | `POST`      | [/api/v1/auth/register](https://deezchat.avicena.dev/api-docs)                                        | Request Body: `username: string, password: string`        |
+| **List All User**             | `GET`       | [/api/v1/users](https://deezchat.avicena.dev/api-docs)                                                |
+| **List User by ID**           | `GET`       | [/api/v1/users/:id](https://deezchat.avicena.dev/api-docs)                                            | Request Params: `id: number`                              |
+| **Update User role**          | `PATCH`     | [/api/v1/users/role/:id](https://deezchat.avicena.dev/api-docs)                                       | Request Params: `id: number` Request Body: `role: string` |
+| **List All Rooms**            | `GET`       | [/api/v1/rooms](https://deezchat.avicena.dev/api-docs)                                                |                                                           |
+| **Create a room**             | `POST`      | [/api/v1/rooms](https://deezchat.avicena.dev/api-docs)                                                | Request Body: `roomName: string, username: string`        |
+| **Delete Room by ID**         | `DELETE`    | [/api/v1/rooms/:id](https://deezchat.avicena.dev/api-docs)                                            | Request Params: `id: number`                              |
+| **User Join**                 | `POST`      | [/api/v1/participants](https://deezchat.avicena.dev/api-docs)                                         | Request Body: `roomName: string, username: string`        |
+| **Get User Join**             | `GET`       | [/api/v1/participants?roomName={roomName}&username={username}](https://deezchat.avicena.dev/api-docs) | Request Query: `roomName: string, username: string`       |
+| **Get User Join by RoomName** | `GET`       | [/api/v1/participants/list?roomName={roomName}](https://deezchat.avicena.dev/api-docs)                | Request Query: `roomName: string`                         |
+| **User Leave**                | `DELETE`    | [/api/v1/participants](https://deezchat.avicena.dev/api-docs)                                         | Request Body: `username: string`                          |
 
 ## Swagger UI - API Documentation and Testing ⚡
 
