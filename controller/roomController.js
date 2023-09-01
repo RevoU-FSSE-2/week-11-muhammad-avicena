@@ -22,65 +22,6 @@ async function createRoom(req, res, next) {
   }
 }
 
-async function userJoin(req, res, next) {
-  const { username, roomName } = req.body;
-  const { db } = req;
-  try {
-    const roomDao = new RoomDao(db);
-    const roomService = new RoomService(roomDao);
-    const result = await roomService.userJoin({ username, roomName });
-    if (result.success) {
-      return res.status(200).json({
-        success: true,
-        message: "Successfully joined a room",
-        data: { _id: result.message },
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function getUserJoin(req, res, next) {
-  const { username, roomName } = req.query;
-  const { db } = req;
-  try {
-    const roomDao = new RoomDao(db);
-    const roomService = new RoomService(roomDao);
-    const result = await roomService.getUserJoin({ username, roomName });
-    if (result.success) {
-      return res.status(200).json({
-        success: true,
-        message: "User join found",
-        data: result.message,
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function getUserJoinbyRoomName(req, res, next) {
-  const { roomName } = req.query;
-  const { db } = req;
-  try {
-    const roomDao = new RoomDao(db);
-    const roomService = new RoomService(roomDao);
-    const result = await roomService.getUserJoinbyRoomName({ roomName });
-    if (result.success) {
-      return res.status(200).json({
-        success: true,
-        message: "User Join found",
-        data: result.message,
-      });
-    } else {
-      res.status(400).json({ success: false, message: result.message });
-    }
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function deleteRoom(req, res, next) {
   const { id } = req.params;
   const { db } = req;
@@ -124,9 +65,6 @@ async function getAllListRooms(req, res, next) {
 
 module.exports = {
   createRoom,
-  userJoin,
-  getUserJoinbyRoomName,
   getAllListRooms,
   deleteRoom,
-  getUserJoin
 };

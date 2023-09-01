@@ -110,12 +110,29 @@ class RoomService {
     }
   }
 
+  async userLeaveRoom({ username }) {
+    try {
+      const roomData = await this.roomDao.userLeaveRoom({ username });
+
+      if (!roomData) {
+        throw new StandardError({
+          status: 404,
+          message: "User join not found",
+        });
+      }
+      return { success: true, message: roomData };
+    } catch (error) {
+      console.log(error);
+      throw new StandardError({ status: error.status, message: error.message });
+    }
+  }
+
   async deleteRoom({ id }) {
     try {
       const roomData = await this.roomDao.deleteRoom({ id });
 
       if (!roomData) {
-        throw new StandardError({ status: 400, message: "Room not found" });
+        throw new StandardError({ status: 404, message: "Room not found" });
       }
       return { success: true, message: roomData };
     } catch (error) {

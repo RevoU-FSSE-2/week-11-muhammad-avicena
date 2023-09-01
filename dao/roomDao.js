@@ -1,7 +1,7 @@
 const StandardError = require("../utils/constant/standardError");
 const { format } = require("date-fns");
 const { ObjectId } = require("mongodb");
-class UserDao {
+class RoomDao {
   constructor(db) {
     this.db = db;
   }
@@ -22,7 +22,7 @@ class UserDao {
 
     if (getRoom) {
       throw new StandardError({
-        status: 400,
+        status: 404,
         message: `${roomName} room is not available. Please try another.`,
       });
     }
@@ -45,88 +45,22 @@ class UserDao {
     return room;
   }
 
-  async userJoin({ username, roomName }) {
-    const user = await this.db
-      .collection("participants")
-      .findOne({ username }, { isDeleted: { $exists: false } });
-
-    if (user) {
-      throw new StandardError({
-        status: 400,
-        message: `${username} is exist. Please try another username.`,
-      });
-    }
-
+  async deleteRoom({ id }) {
+    const objectId = new ObjectId(id);
     const getRoom = await this.db
       .collection("rooms")
-      .findOne({ roomName }, { isDeleted: { $exists: false } });
+      .findOne({ _id: objectId });
 
     if (!getRoom) {
-      throw new StandardError({
-        status: 400,
-        message: `${roomName} room doesn't exist. Please try another.`,
-      });
+      throw new StandardError({ status: 404, message: "Room not found" });
     }
 
-    const userData = {
-      username,
-      roomName,
-    };
+    const rooms = await this.db
+      .collection("rooms")
+      .findOneAndUpdate({ _id: objectId }, { $set: { isDeleted: true } });
 
-    const room = await this.db.collection("participants").insertOne(userData);
-    return room;
-  }
-
-  async getUserJoinbyRoomName({ roomName }) {
-    const user = await this.db
-      .collection("participants")
-      .find({ roomName })
-      .toArray();
-    return user;
-  }
-
-  async getUserJoin({ username, roomName }) {
-    const getRoom = await this.db.collection("participants").findOne({
-      roomName,
-      username,
-      isDeleted: { $exists: false },
-    });
-
-    console.log(getRoom, "isi get room");
-    console.log(username, "isi username");
-    console.log(roomName, "isi roomName");
-
-    if (!getRoom) {
-      throw new StandardError({
-        status: 400,
-        message: "User join not found",
-      });
-    }
-
-    return getRoom;
-  }
-
-  async deleteRoom({ id }) {
-    try {
-      const objectId = new ObjectId(id);
-      const getRoom = await this.db
-        .collection("rooms")
-        .findOne({ _id: objectId });
-
-      if (!getRoom) {
-        throw new Error("Room not found");
-      }
-
-      const rooms = await this.db
-        .collection("rooms")
-        .findOneAndUpdate({ _id: objectId }, { $set: { isDeleted: true } });
-
-      return rooms;
-    } catch (error) {
-      console.log(error.message);
-      throw error;
-    }
+    return rooms;
   }
 }
 
-module.exports = UserDao;
+module.exports = RoomDao;
