@@ -8,39 +8,46 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
 		integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
 	<link rel="stylesheet" href="css/style.css" />
-	<title>ChatCord App</title>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.min.css" rel="stylesheet" />
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+	<title>Dezz-Chat App</title>
 </head>
 
 <body>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const userData = localStorage.getItem("userToken");
+
+			if (!userData) {
+				alert("Unauthorized");
+				window.location.href = "index.html";
+			}
+		});
+	</script>
 	<div class="join-container">
 		<header class="join-header">
-			<h1><i class="fas fa-smile"></i> ChatCord</h1>
+			<h1></i> DeezChat App</h1>
 		</header>
 		<main class="join-main">
-			<form action="chatRoom.html">
+			<form action="#">
 				<div class="form-control">
 					<label for="username">Username</label>
 					<input type="text" name="username" id="username" placeholder="Enter username..." required />
 				</div>
 				<div class="form-control">
-					<label for="room">Room</label>
-					<select name="room" id="room">
-						<option value="JavaScript">JavaScript</option>
-						<option value="Python">Python</option>
-						<option value="PHP">PHP</option>
-						<option value="C#">C#</option>
-						<option value="Ruby">Ruby</option>
-						<option value="Java">Java</option>
-					</select>
+					<label for="roomName">Room</label>
+					<select name="roomName" id="roomName"></select>
 				</div>
-				<button type="submit" class="btn">Join Chat</button>
+				<button id="joinChat" type="submit" class="btn">Join Chat</button>
 			</form>
+			<script>
+				
+			</script>
 		</main>
 	</div>
+	<script src="js/dashboard.js"></script>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
-	integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="js/main.js"></script>
 
 </html>

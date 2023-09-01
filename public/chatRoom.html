@@ -11,9 +11,20 @@
 </head>
 
 <body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const userData = localStorage.getItem("userToken"); 
+
+      if (!userData) {
+        alert("Unauthorized");
+        window.location.href = "dashboard.html";
+      }
+    });
+  </script>
+  
   <div class="chat-container">
     <header class="chat-header">
-      <h1><i class="fas fa-smile"></i> Deez-Chat</h1>
+      <h1></i> DeezChat App</h1>
       <a id="leave-btn" class="btn">Leave Room</a>
     </header>
     <main class="chat-main">

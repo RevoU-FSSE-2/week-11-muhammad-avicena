@@ -1,90 +1,135 @@
-const chatForm = document.getElementById('chat-form');
-const chatMessages = document.querySelector('.chat-messages');
-const roomName = document.getElementById('room-name');
-const userList = document.getElementById('users');
+const chatForm = document.getElementById("chat-form");
+const chatMessages = document.querySelector(".chat-messages");
+const room = document.getElementById("room-name");
+const userList = document.getElementById("users");
 
-// Get username and room from URL
-const { username, room } = Qs.parse(location.search, {
-  ignoreQueryPrefix: true,
-});
+async function fetchData() {
+  try {
+    const { joinRoom } = Qs.parse(location.search, {
+      ignoreQueryPrefix: true,
+    });
+    const usernameData = sessionStorage.getItem("username");
 
-const socket = io();
+    const response = await fetch(
+      `/api/v1/rooms/find?roomName=${joinRoom}&username=${usernameData}`
+    );
+    const { data } = await response.json();
 
-// Join chatroom
-socket.emit('joinRoom', { username, room });
+    console.log("isi data", data);
 
-// // Get room and users
-// socket.on('roomUsers', ({ room, users }) => {
-//   outputRoomName(room);
-//   outputUsers(users);
-// });
+    const roomNameElement = document.getElementById("room-name");
+    roomNameElement.textContent = data.roomName;
 
-// Message from server
-socket.on("message", (message) => {
-  outputMessage(message);
+    const usersList = data;
+    const usersListElement = document.getElementById("users");
+    usersListElement.innerHTML = "";
 
-  // Scroll down
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  console.log(message);
-});
+    const userItem = document.createElement("li");
+    userItem.textContent = usersList.username;
+    usersListElement.appendChild(userItem);
 
-// Message submit
-// chatForm.addEventListener('submit', (e) => {
-//   e.preventDefault();
+    const socket = io();
 
-//   // Get message text
-//   let msg = e.target.elements.msg.value;
+    const { username, roomName } = data;
+    console.log(username, "isi username");
+    console.log(roomName, "isi roomName");
 
-//   msg = msg.trim();
+    socket.emit("joinRoom", { username, roomName });
 
-//   if (!msg) {
-//     return false;
-//   }
+    socket.on("roomUsers", ({ roomName, users }) => {
+      console.log(roomName);
+      outputRoomName(roomName);
+      outputUsers(users);
+    });
 
-//   // Emit message to server
-//   socket.emit('chatMessage', msg);
+    // Message from server
+    socket.on("message", (message) => {
+      outputMessage(message);
 
-//   // Clear input
-//   e.target.elements.msg.value = '';
-//   e.target.elements.msg.focus();
-// });
+      // Scroll down
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 
-// // Output message to DOM
-// function outputMessage(message) {
-//   const div = document.createElement('div');
-//   div.classList.add('message');
-//   const p = document.createElement('p');
-//   p.classList.add('meta');
-//   p.innerText = message.username;
-//   p.innerHTML += `<span>${message.time}</span>`;
-//   div.appendChild(p);
-//   const para = document.createElement('p');
-//   para.classList.add('text');
-//   para.innerText = message.text;
-//   div.appendChild(para);
-//   document.querySelector('.chat-messages').appendChild(div);
-// }
+    socket.on("welcomeMessage", (message) => {
+      outputWelcomeMessage(message);
 
-// // Add room name to DOM
-// function outputRoomName(room) {
-//   roomName.innerText = room;
-// }
+      // Scroll down
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 
-// // Add users to DOM
-function outputUsers(users) {
-  userList.innerHTML = '';
-  users.forEach((user) => {
-    const li = document.createElement('li');
-    li.innerText = user.username;
-    userList.appendChild(li);
-  });
+    // Message submit
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Get message text
+      let msg = e.target.elements.msg.value;
+
+      msg = msg.trim();
+
+      if (!msg) {
+        return false;
+      }
+
+      // Emit message to server
+      socket.emit("chatMessage", msg);
+
+      // Clear input
+      e.target.elements.msg.value = "";
+      e.target.elements.msg.focus();
+    });
+
+    // Output message to DOM
+    function outputMessage(message) {
+      const div = document.createElement("div");
+      div.classList.add("message");
+      const p = document.createElement("p");
+      p.classList.add("meta");
+      p.innerText = message.username;
+      p.innerHTML += `<span>${message.time}</span>`;
+      div.appendChild(p);
+      const para = document.createElement("p");
+      para.classList.add("text");
+      para.innerText = message.text;
+      div.appendChild(para);
+      document.querySelector(".chat-messages").appendChild(div);
+    }
+
+    function outputWelcomeMessage(message) {
+      const div = document.createElement("div");
+      div.classList.add("messageLeave");
+      const para = document.createElement("p");
+      para.classList.add("textLeave");
+      para.innerText = message.text;
+      div.appendChild(para);
+      document.querySelector(".chat-messages").appendChild(div);
+    }
+    // Add room name to DOM
+    function outputRoomName(roomName) {
+      // console.log(roomName);
+      room.innerText = roomName;
+    }
+
+    // Add users to DOM
+    function outputUsers(users) {
+      userList.innerHTML = "";
+      users.forEach((user) => {
+        const li = document.createElement("li");
+        li.innerText = user.username;
+        userList.appendChild(li);
+      });
+    }
+
+    //Prompt the user before leave chat room
+    document.getElementById("leave-btn").addEventListener("click", () => {
+      const leaveRoom = confirm("Are you sure you want to leave the chatroom?");
+      if (leaveRoom) {
+        window.location = "../dashboard.html";
+      } else {
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
 
-// //Prompt the user before leave chat room
-// document.getElementById('leave-btn').addEventListener('click', () => {
-//   const leaveRoom = confirm('Are you sure you want to leave the chatroom?');
-//   if (leaveRoom) {
-//     window.location = '../index.html';
-//   } else {
-//   }
-// });
+fetchData();

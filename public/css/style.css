@@ -105,10 +105,22 @@ a {
 	color: var(--dark-color-b);
 	opacity: 0.7;
 	margin-bottom: 7px;
+	margin-right: 7px;
 }
 
 .chat-messages .message .meta span {
+	padding: 15px;
 	color: #777;
+}
+
+.chat-messages .messageLeave .textLeave {
+	padding: 10px;
+	margin-bottom: 15px;
+	background-color: transparent;
+	border-radius: 5px;
+	overflow-wrap: break-word;
+	text-align: center;
+	font-style: italic;
 }
 
 .chat-form-container {
