@@ -4,6 +4,8 @@ info:
   version: 1.0.0
   description: 'DeezChat App, a Real-Time Chat built using Vanila.js, Node.js, Express.js, WebSocket, MongoDB and implemented RBAC with JWT, Api docs by Swagger, Unit Testing by Jest.'
 servers:
+  - url: https://deezchat.avicena.dev
+    description: 'Production server'
   - url: http://localhost:5001
     description: 'Development server'
 components:
