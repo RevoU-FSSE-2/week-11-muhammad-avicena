@@ -1,6 +1,6 @@
 async function populateRooms() {
   const selectElement = document.getElementById("roomName");
-  const apiEndpoint = `/api/v1/rooms/list`;
+  const apiEndpoint = `/api/v1/rooms`;
   try {
     const response = await fetch(apiEndpoint);
     const { data } = await response.json();
@@ -40,7 +40,7 @@ $("#joinChat").on("click", function (e) {
     };
 
     console.log("Login data", loginData);
-    fetch("/api/v1/rooms/join", {
+    fetch("/api/v1/participants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,9 +56,9 @@ $("#joinChat").on("click", function (e) {
         if (data.success === true) {
           sessionStorage.setItem("username", username);
           Swal.fire({
-            title: "Success Join",
-            text: "Successfully joined in a room, you will be redirected to room in 3 seconds..",
+            title: "Welcome to the DeezChat !",
             icon: "success",
+            text: "Successfully joined in a room, you will be redirected to room in 3 seconds..",
             confirmButtonText: "OK",
           });
           setTimeout(() => {
@@ -90,4 +90,26 @@ $("#joinChat").on("click", function (e) {
       confirmButtonText: "OK",
     });
   }
+});
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const logoutButton = document.getElementById("logout");
+
+  logoutButton.addEventListener("click", async function () {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out",
+      cancelButtonText: "No, I still want to chat",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "../index.html";
+        localStorage.removeItem("userToken");
+      }
+    });
+  });
 });

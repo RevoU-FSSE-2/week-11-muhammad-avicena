@@ -11,7 +11,7 @@ async function fetchData() {
     const usernameData = sessionStorage.getItem("username");
 
     const response = await fetch(
-      `/api/v1/rooms/find?roomName=${joinRoom}&username=${usernameData}`
+      `/api/v1/participants?roomName=${joinRoom}&username=${usernameData}`
     );
     const { data } = await response.json();
 
@@ -19,6 +19,9 @@ async function fetchData() {
 
     const roomNameElement = document.getElementById("room-name");
     roomNameElement.textContent = data.roomName;
+
+    const userProfile = document.getElementById("profile-user");
+    userProfile.innerHTML = `${usernameData}` || "Unknown";
 
     const usersList = data;
     const usersListElement = document.getElementById("users");
@@ -31,8 +34,6 @@ async function fetchData() {
     const socket = io();
 
     const { username, roomName } = data;
-    console.log(username, "isi username");
-    console.log(roomName, "isi roomName");
 
     socket.emit("joinRoom", { username, roomName });
 
@@ -42,26 +43,20 @@ async function fetchData() {
       outputUsers(users);
     });
 
-    // Message from server
     socket.on("message", (message) => {
       outputMessage(message);
 
-      // Scroll down
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
     socket.on("welcomeMessage", (message) => {
       outputWelcomeMessage(message);
 
-      // Scroll down
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
-    // Message submit
     chatForm.addEventListener("submit", (e) => {
       e.preventDefault();
-
-      // Get message text
       let msg = e.target.elements.msg.value;
 
       msg = msg.trim();
@@ -70,15 +65,12 @@ async function fetchData() {
         return false;
       }
 
-      // Emit message to server
       socket.emit("chatMessage", msg);
 
-      // Clear input
       e.target.elements.msg.value = "";
       e.target.elements.msg.focus();
     });
 
-    // Output message to DOM
     function outputMessage(message) {
       const div = document.createElement("div");
       div.classList.add("message");
@@ -103,13 +95,10 @@ async function fetchData() {
       div.appendChild(para);
       document.querySelector(".chat-messages").appendChild(div);
     }
-    // Add room name to DOM
     function outputRoomName(roomName) {
-      // console.log(roomName);
       room.innerText = roomName;
     }
 
-    // Add users to DOM
     function outputUsers(users) {
       userList.innerHTML = "";
       users.forEach((user) => {
@@ -118,18 +107,70 @@ async function fetchData() {
         userList.appendChild(li);
       });
     }
-
-    //Prompt the user before leave chat room
-    document.getElementById("leave-btn").addEventListener("click", () => {
-      const leaveRoom = confirm("Are you sure you want to leave the chatroom?");
-      if (leaveRoom) {
-        window.location = "../dashboard.html";
-      } else {
-      }
-    });
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.log(error.message);
+    window.location.href = "../dashboard.html";
   }
 }
 
 fetchData();
+
+document.addEventListener("DOMContentLoaded", function () {
+  const leaveButton = document.getElementById("leave-btn");
+  const usernameData = sessionStorage.getItem("username");
+
+  leaveButton.addEventListener("click", function () {
+    const bodyData = {
+      username: usernameData,
+    };
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will leave this room chat and probably one of your friend will cry.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, leave this room",
+      cancelButtonText: "No, I still want to chat",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch("/api/v1/participants", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bodyData),
+        })
+          .then((response) => {
+            console.log(response);
+            return response.json();
+          })
+          .then((data) => {
+            console.log("isi data", data);
+            if (data.success === true) {
+              sessionStorage.removeItem("username");
+              window.location.href = "../dashboard.html";
+            } else {
+              Swal.fire({
+                title: "Internal Server Error",
+                text: `Please contact the admin.`,
+                icon: "error",
+                confirmButtonText: "OK",
+              });
+              window.location.href = "../index.html";
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error.message);
+            Swal.fire({
+              title: "Internal Server Error",
+              text: `${error.message}. Please contact the admin.`,
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+            window.location.href = "../index.html";
+          });
+      }
+    });
+  });
+});

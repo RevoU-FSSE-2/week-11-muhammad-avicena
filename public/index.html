@@ -4,10 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deez-Chat App</title>
+  <title>DeezChat</title>
   <link rel="stylesheet" href="css/index.css" />
   <link rel="icon" href="./img/images.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+    integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"
@@ -43,12 +45,12 @@
   </script>
 </head>
 
-<body>
+<body class="dark">
   <section class="bg-gray-50 dark:bg-gray-900">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <a href="#"
-        class="flex items-center mb-6 text-2xl font-semibold text-gray-900 underline decoration-indigo-500 dark:text-white">
-        Deez-Chat Application
+        class="flex items-center mb-6 text-3xl font-semibold text-gray-900 underline decoration-indigo-500 dark:text-white">
+        <i class="fas fa-comments mr-2"></i>DeezChat Application
       </a>
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -71,19 +73,6 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required="" />
             </div>
-            <div class="flex items-center justify-between">
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input id="remember" aria-describedby="remember" type="checkbox"
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" />
-                </div>
-                <div class="ml-3 text-sm">
-                  <label for="remember" class="text-gray-500 dark:text-gray-300">Remember me</label>
-                </div>
-              </div>
-              <a href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot
-                password?</a>
-            </div>
             <button id="signInButton" type="submit"
               class="w-full bg-black text-white hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
               Log in
@@ -93,73 +82,14 @@
               <a href="register.html"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500">Register account</a>
             </p>
-            <a class="flex justify-center text-gray-500 text-sm underline decoration-sky-600">© 2023 Muhammad Avicena.
+            <a class="flex justify-center text-gray-500 dark:text-white text-sm underline decoration-sky-600">© 2023 Muhammad Avicena.
               All rights reserved</a>
           </form>
-          <script>
-            $("#signInButton").on("click", function (e) {
-              e.preventDefault();
-              const email = document.getElementById("username").value;
-              const password = document.getElementById("password").value;
-
-              const loginData = {
-                username: email,
-                password: password,
-              };
-              fetch("http://localhost:5001/api/v1/auth/login", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(loginData),
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((data) => {
-                  console.log("isi data", data);
-                  if (data.success === true) {
-                    Swal.fire({
-                      title: "Success Login",
-                      text: "Successfully logged in, you will be redirected to dashboard in 3 seconds..",
-                      icon: "success",
-                      confirmButtonText: "OK",
-                    });
-                    localStorage.setItem(
-                      "userToken",
-                      JSON.stringify(data.data)
-                    );
-                    setTimeout(() => {
-                      window.location.href = "dashboard.html"; 
-                    }, 3000);
-                  } else {
-                    Swal.fire({
-                      title: "Failed Login",
-                      text: data.message,
-                      icon: "error",
-                      confirmButtonText: "OK",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  console.error("Error:", error.message);
-                  Swal.fire({
-                    title: "Internal Server Error",
-                    text: `${error.message}. Please contact the admin.`,
-                    icon: "error",
-                    confirmButtonText: "OK",
-                  });
-                });
-            });
-          </script>
         </div>
       </div>
     </div>
   </section>
-  <script>
-    var exports = "";
-  </script>
-  <script type="module" src="dist/index.js"></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>
