@@ -14,7 +14,7 @@ function configureSocket(io) {
       // Welcome current user
       socket.emit(
         "message",
-        formatMessage(botName, "Welcome to Deez-Chat App, Let's talk !")
+        formatMessage(botName, "Welcome to DeezChat App, Let's talk !")
       );
 
       // Broadcast when a user connects
