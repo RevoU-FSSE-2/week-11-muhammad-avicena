@@ -39,6 +39,7 @@ const indexRouter = require("./routes/indexRoutes");
 const authRouter = require("./routes/authRoutes");
 const userRouter = require("./routes/userRoutes");
 const roomRouter = require("./routes/roomRoutes");
+const participantRouter = require("./routes/participantRoutes");
 
 // Use router
 app.use("/", indexRouter);
@@ -46,6 +47,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/rooms", roomRouter);
+app.use("/api/v1/participants", participantRouter);
 
 // Check connection to database
 async function connectDatabase() {
