@@ -9,12 +9,22 @@ async function fetchData() {
       ignoreQueryPrefix: true,
     });
     const usernameData = sessionStorage.getItem("username");
+    const loadingSwal = Swal.fire({
+      title: "Please wait...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     const response = await fetch(
       `/api/v1/participants?roomName=${joinRoom}&username=${usernameData}`
     );
     const { data } = await response.json();
-
+    
+    loadingSwal.close();
     console.log("isi data", data);
 
     const roomNameElement = document.getElementById("room-name");
@@ -173,4 +183,43 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const userData = localStorage.getItem("userToken");
+  const username = sessionStorage.getItem("username");
+
+  if (!userData) {
+    Swal.fire({
+      title: "Unauthorized",
+      text: "Kindly do a proper login to access this page",
+      icon: "error",
+      showCancelButton: false,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "index.html";
+      } else {
+        setTimeout(function () {
+          window.location.href = "index.html";
+        }, 1000);
+      }
+    });
+  } else if (!username) {
+    Swal.fire({
+      title: "Bad Request",
+      text: "Kindly pick a username to access this page",
+      icon: "error",
+      showCancelButton: false,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "dashboard.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
+    });
+  }
 });

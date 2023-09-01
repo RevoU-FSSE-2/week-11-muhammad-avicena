@@ -75,7 +75,7 @@ $("#signInButton").on("click", function (e) {
     });
 });
 
-$("#signInButton").on("click", function (e) {
+$("#registerButton").on("click", function (e) {
   e.preventDefault();
   $(this).prop("disabled", true);
 
@@ -93,7 +93,7 @@ $("#signInButton").on("click", function (e) {
   const password = document.getElementById("password").value;
   const gender = document.getElementById("gender").value;
 
-  const loginData = {
+  const registerData = {
     username: username,
     password: password,
     gender: gender,
@@ -104,7 +104,7 @@ $("#signInButton").on("click", function (e) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(loginData),
+    body: JSON.stringify(registerData),
   })
     .then((response) => {
       return response.json();
