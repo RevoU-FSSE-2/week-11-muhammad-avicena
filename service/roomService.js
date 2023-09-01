@@ -36,7 +36,7 @@ class RoomService {
       if (!room) {
         throw new StandardError({ status: 404, message: "Room not found" });
       }
-      return { success: true, message: room};
+      return { success: true, message: room };
     } catch (error) {
       console.log(error);
       throw new StandardError({ status: error.status, message: error.message });
@@ -63,6 +63,31 @@ class RoomService {
       }
 
       return { success: true, message: room.insertedId };
+    } catch (error) {
+      console.log(error);
+      throw new StandardError({ status: error.status, message: error.message });
+    }
+  }
+
+  async getUserJoin({ username, roomName }) {
+    try {
+      if (!roomName || !username) {
+        throw new StandardError({
+          success: false,
+          message: "Invalid input data. Please try again.",
+          status: 400,
+        });
+      }
+
+      const room = await this.roomDao.getUserJoin({
+        username,
+        roomName,
+      });
+
+      if (!room) {
+        throw new StandardError({ status: 400, message: "Invalid input data" });
+      }
+      return { success: true, message: room };
     } catch (error) {
       console.log(error);
       throw new StandardError({ status: error.status, message: error.message });

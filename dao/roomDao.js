@@ -46,9 +46,16 @@ class UserDao {
   }
 
   async userJoin({ username, roomName }) {
-    // const user = await this.db
-    //   .collection("users")
-    //   .findOne({ username }, { isDeleted: { $exists: false } });
+    const user = await this.db
+      .collection("participants")
+      .findOne({ username }, { isDeleted: { $exists: false } });
+
+    if (user) {
+      throw new StandardError({
+        status: 400,
+        message: `${username} is exist. Please try another username.`,
+      });
+    }
 
     const getRoom = await this.db
       .collection("rooms")
@@ -76,6 +83,27 @@ class UserDao {
       .find({ roomName })
       .toArray();
     return user;
+  }
+
+  async getUserJoin({ username, roomName }) {
+    const getRoom = await this.db.collection("participants").findOne({
+      roomName,
+      username,
+      isDeleted: { $exists: false },
+    });
+
+    console.log(getRoom, "isi get room");
+    console.log(username, "isi username");
+    console.log(roomName, "isi roomName");
+
+    if (!getRoom) {
+      throw new StandardError({
+        status: 400,
+        message: "User join not found",
+      });
+    }
+
+    return getRoom;
   }
 
   async deleteRoom({ id }) {
