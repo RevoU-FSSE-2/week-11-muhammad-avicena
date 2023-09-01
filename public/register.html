@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DeezChat App</title>
   <link rel="stylesheet" href="css/index.css" />
-  <link rel="icon" href="./img/images.png" />
+  <link rel="icon" href="./img/icon-msg.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+    integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"
@@ -43,12 +45,12 @@
   </script>
 </head>
 
-<body>
+<body class="dark">
   <section class="bg-gray-50 dark:bg-gray-900">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <a href="#"
-        class="flex items-center mb-6 text-2xl font-semibold text-gray-900 underline decoration-indigo-500 dark:text-white">
-        DeezChat Application
+        class="flex items-center mb-6 text-3xl font-semibold text-gray-900 underline decoration-indigo-500 dark:text-white">
+        <i class="fas fa-comments mr-2"></i>DeezChat Application
       </a>
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -85,68 +87,15 @@
               Already have an account ?
               <a href="index.html" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Log in</a>
             </p>
-            <a class="flex justify-center text-gray-500 text-sm underline decoration-sky-600">© 2023 Muhammad Avicena.
+            <a class="flex justify-center text-gray-500 dark:text-white text-sm underline decoration-sky-600">© 2023
+              Muhammad Avicena.
               All rights reserved</a>
           </form>
-          <script>
-            $("#signInButton").on("click", function (e) {
-              e.preventDefault();
-              const username = document.getElementById("username").value;
-              const password = document.getElementById("password").value;
-              const gender = document.getElementById("gender").value;
-
-              const loginData = {
-                username: username,
-                password: password,
-                gender: gender
-              };
-              fetch("http://localhost:5001/api/v1/auth/register", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(loginData),
-              })
-                .then((response) => {
-                  return response.json();
-                })
-                .then((data) => {
-                  console.log("isi data", data);
-                  if (data.success === true) {
-                    Swal.fire({
-                      title: "Success Register",
-                      text: "Successfully created an account. You may now log in to the application.",
-                      icon: "success",
-                      confirmButtonText: "OK",
-                    });
-                  } else {
-                    Swal.fire({
-                      title: "Failed Register",
-                      text: data.message,
-                      icon: "error",
-                      confirmButtonText: "OK",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  console.error("Error:", error);
-                  Swal.fire({
-                    title: "Internal Server Error",
-                    text: `${error.message}. Please contact the admin.`,
-                    icon: "error",
-                    confirmButtonText: "OK",
-                  });
-                });
-            });
-          </script>
         </div>
       </div>
     </div>
   </section>
-  <script>
-    var exports = "";
-  </script>
-  <script type="module" src="dist/index.js"></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>
