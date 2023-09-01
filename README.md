@@ -28,24 +28,9 @@ Interested to have collaboration ? Find me on:
 - API Documentation
   - Swagger UI
 
-## KEY FEATURES 🌟
+## ARCHITECTURE 🌟
 
-- Auth
-  - Login (JWT Auth) -> return a token for authorization
-  - Register
-    - Member -> default role
-    - Admin
-    - Manager
-- Room
-  - Join a room -> require user authentication
-  - Create a room -> require user authentication
-  - Get list user join by RoomName -> require user authentication
-  - Get list rooms -> require user authentication
-  - Delete a room -> require admin/manager role
-- User
-  - Get list users -> require admin/manager role
-  - Get user by ID -> require admin/manager role
-  - Patch/Update user role -> require manager role
+![arch](./assets-github/architecture.png)
 
 ## HOW TO SET UP 📰
 
@@ -61,7 +46,7 @@ You will need a github account to clone this repository, make sure you're connec
 - npm install
 
 # Set up .env, follow the template from `.env.example` file. After modify according to your environment then delete `.example`
-  
+
   # PORT
   PORT=5001
 
