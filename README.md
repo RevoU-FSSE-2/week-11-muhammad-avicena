@@ -39,7 +39,7 @@ You will need a github account to clone this repository, make sure you're connec
 ```bash
 # Clone this repository or simply fork it.
 
-- git clone https://github.com/RevoU-FSSE-2/week-11-muhammad-avicena.git
+- git clone https://github.com/muhammad-avicena/deez-chat-app.git
 
 # Install depedencies
 
@@ -71,7 +71,7 @@ You will need a github account to clone this repository, make sure you're connec
 | Name                          | HTTP Method | Endpoint                                                                                              | Requirements                                              |
 | ----------------------------- | ----------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | **Login User**                | `POST`      | [/api/v1/auth/login](https://deezchat.avicena.dev/api-docs)                                           | Request Body: `username: string, password: string`        |
-| **Register User**             | `POST`      | [/api/v1/auth/register](https://deezchat.avicena.dev/api-docs)                                        | Request Body: `username: string, password: string`        |
+| **Register User**             | `POST`      | [/api/v1/auth/register](https://deezchat.avicena.dev/api-docs)                                        | Request Body: `username: string, password: string, gender: string`        |
 | **List All User**             | `GET`       | [/api/v1/users](https://deezchat.avicena.dev/api-docs)                                                |
 | **List User by ID**           | `GET`       | [/api/v1/users/:id](https://deezchat.avicena.dev/api-docs)                                            | Request Params: `id: number`                              |
 | **Update User role**          | `PATCH`     | [/api/v1/users/role/:id](https://deezchat.avicena.dev/api-docs)                                       | Request Params: `id: number` Request Body: `role: string` |

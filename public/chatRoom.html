@@ -47,39 +47,35 @@
 </head>
 
 <body>
-  <!-- <div class="min-h-screen flex items-center justify-center"> -->
-    <div id="container" class="chat-container max-w-screen-lg  bg-white shadow-lg rounded-lg">
-      <header
-        class="chat-header border bg-gray-800 border-gray-700 text-white p-4 flex flex-col items-center md:flex-row md:items-center justify-between">
-        <h1 class="text-2xl font-semibold text-indigo-500"><i class="fas fa-comments mr-2"></i>DeezChat App</h1>
-        <h3 class="text-base mt-2 md:mt-0 md:ml-4 underline decoration-cyan-500">Welcome, <a id="profile-user"></a> !
-        </h3>
-        <button id="leave-btn" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mt-2 md:mt-0">
-          Leave Room
-        </button>
-      </header>
-      <main class="chat-main grid grid-cols-1 md:grid-cols-4 height-chatroom">
-        <div class="chat-sidebar border bg-gray-800 border-gray-700 text-white py-4 px-6 md:col-span-1 overflow-y-auto">
-          <h3 class="text-xl mb-4"><i class="fas fa-comments"></i> Room Name</h3>
-          <button id="room-name" class="bg-blue-500 mb-2 hover:bg-blue-700 text-white py-2 px-4 rounded"></button>
-          <h3 class="text-xl mb-2"><i class="fas fa-users"></i> List Users</h3>
-          <ul id="users"></ul>
-        </div>
-        <div class="chat-messages border bg-gray-900 border-gray-700 md:col-span-3 py-6 px-8 overflow-y-auto"></div>
-      </main>
-      <div class="chat-form-container py-4 px-6 border bg-gray-800 border-gray-700">
-        <form id="chat-form" class="flex items-center">
-          <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off"
-            class="flex-1 pl-4 py-2 px-4 mr-2 bg-white rounded-full outline-none">
-          <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-            <i class="fas fa-paper-plane mr-2"></i> Send
-          </button>
-        </form>
+  <div id="container" class="chat-container max-w-screen-lg  bg-white shadow-lg rounded-lg">
+    <header
+      class="chat-header border bg-gray-800 border-gray-700 text-white p-4 flex flex-col items-center md:flex-row md:items-center justify-between">
+      <h1 class="text-2xl font-semibold text-indigo-500"><i class="fas fa-comments mr-2"></i>DeezChat App</h1>
+      <h3 class="text-base mt-2 md:mt-0 md:ml-4 underline decoration-cyan-500">Welcome, <a id="profile-user"></a> !
+      </h3>
+      <button id="leave-btn" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mt-2 md:mt-0">
+        Leave Room
+      </button>
+    </header>
+    <main class="chat-main grid grid-cols-1 md:grid-cols-4 height-chatroom">
+      <div class="chat-sidebar border bg-gray-800 border-gray-700 text-white py-4 px-6 md:col-span-1 overflow-y-auto">
+        <h3 class="text-xl mb-4"><i class="fas fa-comments"></i> Room Name</h3>
+        <button id="room-name" class="bg-blue-500 mb-2 hover:bg-blue-700 text-white py-2 px-4 rounded"></button>
+        <h3 class="text-xl mb-2"><i class="fas fa-users"></i> List Users</h3>
+        <ul id="users"></ul>
       </div>
+      <div class="chat-messages border bg-gray-900 border-gray-700 md:col-span-3 py-6 px-8 overflow-y-auto"></div>
+    </main>
+    <div class="chat-form-container py-4 px-6 border bg-gray-800 border-gray-700">
+      <form id="chat-form" class="flex items-center">
+        <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off"
+          class="flex-1 pl-4 py-2 px-4 mr-2 bg-white rounded-full outline-none">
+        <button id="submitMsg" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+          <i class="fas fa-paper-plane mr-2"></i> Send
+        </button>
+      </form>
     </div>
-  <!-- </div> -->
-
-
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
     integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
