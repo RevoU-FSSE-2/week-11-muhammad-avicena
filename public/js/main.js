@@ -23,7 +23,7 @@ async function fetchData() {
       `/api/v1/participants?roomName=${joinRoom}&username=${usernameData}`
     );
     const { data } = await response.json();
-    
+
     loadingSwal.close();
     console.log("isi data", data);
 
@@ -65,20 +65,37 @@ async function fetchData() {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
 
-    chatForm.addEventListener("submit", (e) => {
+    chatForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       let msg = e.target.elements.msg.value;
 
       msg = msg.trim();
 
-      if (!msg) {
-        return false;
+      if (msg.length <= 100) {
+        socket.emit("chatMessage", msg);
+        e.target.elements.msg.value = `Cooldown in 3 seconds...`; 
+        e.target.elements.msg.disabled = true;
+        document.getElementById("submitMsg").disabled = true;
+
+        let countdown = 2; 
+        const countdownInterval = setInterval(function () {
+          e.target.elements.msg.value = `Cooldown in ${countdown} seconds...`;
+          countdown--;
+          if (countdown < 0) {
+            clearInterval(countdownInterval);
+            e.target.elements.msg.value = ""; 
+            e.target.elements.msg.disabled = false;
+            document.getElementById("submitMsg").disabled = false;
+            e.target.elements.msg.focus();
+          }
+        }, 1000);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Message is too long!",
+          text: "Maximum 100 characters allowed.",
+        });
       }
-
-      socket.emit("chatMessage", msg);
-
-      e.target.elements.msg.value = "";
-      e.target.elements.msg.focus();
     });
 
     function outputMessage(message) {
